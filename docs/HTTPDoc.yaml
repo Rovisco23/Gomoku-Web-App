@@ -1,0 +1,1213 @@
+openapi: 3.0.1
+info:
+  {
+    "title": "Gomoku",
+    "description": "This is a project of the game known as gomoku",
+    "contact":{
+      "name": "API SUPPORT",
+      "email": "a49508@alunos.isel.pt"
+    },
+    license:{
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": 1.0.1
+  }
+
+
+tags: [{name: "Users"}, {name: "Games"}]
+
+
+
+paths:
+  {
+    "/api/users/{id}":{
+      "get": {
+        "tags":[
+          "Users"
+        ],
+        "summary": USER_BY_ID,
+        "operationId": "getUser",
+        "description": "Gets a user by the id",
+        "parameters":
+          [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "User id",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+        "responses":{
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json":{
+                "schema": {
+                  "type": "string",
+                },
+                "example": {
+                  "id": 2,
+                  "username": primeirouser,
+                  "email": "user@email.com"
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "Not found",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "User does not exist"
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal Server Error",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "Internal Server Error. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/signin": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": SIGN_IN,
+        "operationId": "createUser",
+        "description": "Creates a user",
+        "parameters":
+          [
+            {
+              "name": "username",
+              "in": "header",
+              "description": "Username",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "email",
+              "in": "header",
+              "description": "Email of the user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "password",
+              "in": "header",
+              "description": "Password of the user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                },
+                "example": {
+                             "Internal Server Error. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "post": {
+        "tags":[
+          "Users"
+        ],
+        "summary": LOGIN,
+        "operationId" : "login",
+        "description": "Logs in a user",
+        "parameters":
+          [
+            {
+              "name": "userId",
+              "in": "cookie",
+              "description": "UserId",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "username",
+              "in": "header",
+              "description": "Username",
+              "required" : true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "password",
+              "in": "header",
+              "description": "Password of the user",
+              "required" : true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "User or password are invalid."
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal Server Error",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "Internal Server Error. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/logout": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": LOGOUT,
+        "operationId": "logout",
+        "description": "Logs out a user",
+        "parameters":
+          [
+            {
+              "name": "id",
+              "in": "header",
+              "description": "Id of the user",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "username",
+              "in": "header",
+              "description": "Username",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "email",
+              "in": "header",
+              "description": "Email of the user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "password",
+              "in": "header",
+              "description": "Password of the user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "token",
+              "in": "header",
+              "description": "Token of user",
+              "required" : true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": DELETE_USER_BY_ID,
+        "operationId": "deleteUser",
+        "description": "Deletes a user by the id",
+        "parameters":
+          [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "User id",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                },
+                "example": {
+                  "id": 2,
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                },
+                "example": {
+                             "User does not exist"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                },
+                "example": {
+                             "Internal Server Error. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rankings": {
+      "get": {
+        "tags":[
+          "Users"
+        ],
+        "summary": RANKINGS,
+        "operationId": "getRankings",
+        "description": "Returns the ranking of the users",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "example": [{
+                  "Id": 1,
+                  "games_played": 8,
+                  "games_won": 2,
+                  "games_lost": 6,
+                  "games_drawn": 0,
+                  "winrate": "25%"
+                },
+                  {
+                    "Id": 2,
+                    "games_played": 8,
+                    "games_won": 6,
+                    "games_lost": 2,
+                    "games_drawn": 0,
+                    "winrate": "75%"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rankings/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": USER_RANKINGS,
+        "operationId": "getRankings",
+        "description": "Returns the ranking of the users",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the user",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "Id": 1,
+                  "games_played": 8,
+                  "games_won": 2,
+                  "games_lost": 6,
+                  "games_drawn": 0,
+                  "winrate": "25%"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/about": {
+      "get": {
+        "tags":[
+          "Users"
+        ],
+        "summary": ABOUT,
+        "operationId": "about",
+        "description": "Returns the information about the project creators",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "example":{
+                  "autors": "Made By: 49508 - João Mota, 49487 - Ricardo Rovisco, 48337 - Daniel Antunes",
+                  "version": "1.0.0",
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/check": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": CHECK,
+        "operationId": "check",
+        "description": "Checks the state of the session",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "check cookies $cookies"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/games": {
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "summary": START,
+        "operationId": "startGame",
+        "description": "Starts a new game",
+        "parameters":
+          [
+            {
+              "name": "userId",
+              "in": "header",
+              "description": "Id of the user associated to the game",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "rule",
+              "in": "header",
+              "description": "Set of rules for the game",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "boardSize",
+              "in": "header",
+              "description": "Size of the board the game will be played in",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "id",
+              "in": "header",
+              "description": "Id of the logged user",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "username",
+              "in": "header",
+              "description": "Username of the logged",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "email",
+              "in": "header",
+              "description": "Email of the logged user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "password",
+              "in": "header",
+              "description": "Password of logged user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "token",
+              "in": "header",
+              "description": "Token of logged user",
+              "required" : true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                },
+                "example": [
+                  {
+                    "Gameid": 9,
+                    "cells": "-----------------------------------------------------------------------------------------------------------------------------------B---------------------------------------------------------------------------------------------",
+                    "size": 15,
+                    "turn": "W",
+                    "state": "On Going",
+                    "playerB": 1,
+                    "playerW": 2,
+                  },
+                  {
+                    "Lobby created"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                },
+                "example": {
+                             "Invalid Parameter."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                },
+                "example": {
+                             "You don't have access to this game."
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal Server Error",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "Internal Server Error. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/games/{id}": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": GAME_BY_ID,
+        "operationId": "getGame",
+        "description": "Gets a game by its Id",
+        "parameters":
+          [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Id of the game",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "userid",
+              "in": "header",
+              "description": "Id of the logged user",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "username",
+              "in": "header",
+              "description": "Username of the logged",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "email",
+              "in": "header",
+              "description": "Email of the logged user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "password",
+              "in": "header",
+              "description": "Password of logged user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "token",
+              "in": "header",
+              "description": "Token of logged user",
+              "required" : true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                },
+                "example": {
+                  "Gameid": 9,
+                  "cells": "-----------------------------------------------------------------------------------------------------------------------------------B---------------------------------------------------------------------------------------------",
+                  "size": 15,
+                  "turn": "W",
+                  "state": "On Going",
+                  "playerB": 1,
+                  "playerW": 2,
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                },
+                "example": {
+                             "Game with given Id does not exist."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/games/{id}": {
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "summary": PLAY,
+        "operationId": "play",
+        "description": "Makes a play in the game",
+        "parameters":
+          [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID of the game",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "userId",
+              "in": "header",
+              "description": "Id of the user associated with the game",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "row",
+              "in": "header",
+              "description": "Row of the play to be made",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "col",
+              "in": "header",
+              "description": "Column of the play to be made",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "userid",
+              "in": "header",
+              "description": "Id of the logged user",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "username",
+              "in": "header",
+              "description": "Username of the logged",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "email",
+              "in": "header",
+              "description": "Email of the logged user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "password",
+              "in": "header",
+              "description": "Password of logged user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "token",
+              "in": "header",
+              "description": "Token of logged user",
+              "required" : true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": {
+                    "Gameid": 9,
+                    "cells": "-----------------------------------------------------------------------------------------------------------------------------------B---------------------------------------------------------------------------------------------",
+                    "size": 15,
+                    "turn": "W",
+                    "state": "On Going",
+                    "playerB": 1,
+                    "playerW": 2,
+                  }
+                },
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                },
+                "example": {
+                             "This game already ended. || That cell already has a piece. || It's not your turn. || Move is not valid."
+                }
+              }
+            }
+          },
+          "401":{
+            "description": "Unauthorized",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "You don't have access to this game."
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "Not found",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "Game with given Id does not exist."
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal Server Error",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "Internal Server Error. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/giveup/{id}": {
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "summary": DRAW,
+        "operationId": "giveUpGame",
+        "description": "Gives up the game",
+        "parameters":
+          [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Id of the game containing the board",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "userid",
+              "in": "header",
+              "description": "Id of the logged user",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "username",
+              "in": "header",
+              "description": "Username of the logged",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "email",
+              "in": "header",
+              "description": "Email of the logged user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "password",
+              "in": "header",
+              "description": "Password of logged user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "token",
+              "in": "header",
+              "description": "Token of logged user",
+              "required" : true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                },
+                "example": {
+                             "You don't have access to this game."
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "Not found",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "Game with given Id does not exist."
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal Server Error",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "Internal Server Error. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lobbies,{userId}": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": LOBBY_UPDATE,
+        "operationId": "checkLobbyUpdate",
+        "description": "Checks if the lobby has been updated",
+        "parameters":
+          [
+            {
+              "name": "userId",
+              "in": "path",
+              "description": "Id of the user in the lobby",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "userid",
+              "in": "header",
+              "description": "Id of the logged user",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "username",
+              "in": "header",
+              "description": "Username of the logged",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "email",
+              "in": "header",
+              "description": "Email of the logged user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "password",
+              "in": "header",
+              "description": "Password of logged user",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "token",
+              "in": "header",
+              "description": "Token of logged user",
+              "required" : true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                },
+                "example":[
+                  {
+                    "gameId": "2"
+                  },
+                  {
+                    "Lobby is not full"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                },
+                "example": {
+                             "You don't have access to this game."
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "Not found",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "Game with given Id does not exist."
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal Server Error",
+            "content":{
+              "application/json":{
+                "schema":{
+                },
+                "example":{
+                            "Internal Server Error. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/games/{id}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": DELETE,
+        "operationId": "deleteGame",
+        "description": "Deletes a game by the id",
+        "parameters":
+          [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Game id",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                },
+                "example": {
+                  "id": 2,
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                },
+                "example": {
+                             "Game does not exist"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                },
+                "example": {
+                             "Internal Server Error. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
